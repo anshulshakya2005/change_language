@@ -62,14 +62,14 @@ function TextChange() {
     >
       {/* Header */}
       <div
-        className={`flex justify-between items-center px-6 py-4 shadow-xl backdrop-blur-lg ${
+        className={`flex flex-col sm:flex-row justify-between items-center gap-4 px-4 sm:px-6 py-4 shadow-xl backdrop-blur-lg ${
           darkMode
             ? "bg-slate-900 border-b border-slate-800"
             : "bg-gradient-to-r from-indigo-600 to-cyan-500"
         }`}
       >
         <h1
-          className={`flex items-center gap-3 text-3xl font-bold tracking-wide ${
+          className={`flex items-center gap-2 sm:gap-3 text-xl sm:text-3xl font-bold ${
             darkMode ? "text-white" : "text-black"
           }`}
         >
@@ -147,12 +147,12 @@ duration-300 shadow-md ${
                 ? "bg-slate-900 text-white placeholder-slate-500"
                 : "bg-white text-slate-700 placeholder-slate-400"
             }`}
-              onKeyDown={(e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault(); // Prevent newline
-      handleSubmit(onSubmit, onError)(); // Submit the form
-    }
-  }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                handleSubmit(onSubmit, onError)();
+              }
+            }}
           />
 
           {/* Bottom Controls */}
