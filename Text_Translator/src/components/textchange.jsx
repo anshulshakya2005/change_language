@@ -116,120 +116,128 @@ active:scale-95"
         ))}
       </div>
 
-      {/* Bottom Panel */}
-      <form
-        onSubmit={handleSubmit(onSubmit, onError)}
-        className={`p-5 backdrop-blur-xl ${
-          darkMode
-            ? "bg-slate-950/80 border-t border-slate-800"
-            : "bg-white/70 border-t border-slate-200"
-        }`}
-      >
+   {/* Bottom Panel */}
+<form
+  onSubmit={handleSubmit(onSubmit, onError)}
+  className={`p-3 sm:p-4 md:p-5 backdrop-blur-xl ${
+    darkMode
+      ? "bg-slate-950/80 border-t border-slate-800"
+      : "bg-white/70 border-t border-slate-200"
+  }`}
+>
+  <div
+    className={`rounded-3xl shadow-2xl transition-all duration-300 ${
+      darkMode
+        ? "bg-slate-900 border border-slate-700"
+        : "bg-white border border-slate-200"
+    }`}
+  >
+    {/* Textarea */}
+    <textarea
+      maxLength={500}
+      {...register("text", { required: true })}
+      placeholder="Type your text here..."
+      className={`w-full p-5 resize-none rounded-t-3xl text-base transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+        text.length > 0 ? "h-36" : "h-20"
+      } ${
+        darkMode
+          ? "bg-slate-900 text-white placeholder-slate-500"
+          : "bg-white text-slate-700 placeholder-slate-400"
+      }`}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          handleSubmit(onSubmit, onError)();
+        }
+      }}
+    />
+
+    {/* Controls */}
+    <div className="px-4 pb-4 pt-2 space-y-4">
+
+      {/* Progress */}
+      <div className="flex items-center justify-between">
         <div
-          className={`relative rounded-3xl
-shadow-2xl
-transition-all
-duration-300 shadow-md ${
-            darkMode
-              ? "bg-slate-900 border-slate-700"
-              : "bg-white border-slate-200"
+          className={`w-28 h-2 rounded-full overflow-hidden ${
+            darkMode ? "bg-slate-700" : "bg-slate-200"
           }`}
         >
-          {/* Textarea */}
-          <textarea
-            maxLength={500}
-            {...register("text", { required: true })}
-            placeholder="Type your text here..."
-            className={`w-full p-5 pb-20 resize-none rounded-3xl text-base transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-              text.length > 0 ? "h-36" : "h-14"
-            } ${
-              darkMode
-                ? "bg-slate-900 text-white placeholder-slate-500"
-                : "bg-white text-slate-700 placeholder-slate-400"
+          <div
+            className={`h-full transition-all duration-300 ${
+              text.length > 450
+                ? "bg-red-500"
+                : text.length > 350
+                ? "bg-yellow-500"
+                : "bg-indigo-500"
             }`}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                handleSubmit(onSubmit, onError)();
-              }
+            style={{
+              width: `${(text.length / 500) * 100}%`,
             }}
           />
-
-          {/* Bottom Controls */}
-          <div
-            className={`absolute bottom-4 left-4 right-4 flex items-center justify-between ${
-              darkMode ? "text-white" : "text-gray-800"
-            }`}
-          >
-            {/* Left Side */}
-            <div className="flex items-center gap-3">
-              <div
-                className={`w-24 h-2 rounded-full overflow-hidden ${
-                  darkMode ? "bg-slate-700" : "bg-slate-200"
-                }`}
-              >
-                <div
-                  className={`h-full transition-all duration-300 ${
-                    text.length > 450
-                      ? "bg-red-500"
-                      : text.length > 350
-                        ? "bg-yellow-500"
-                        : "bg-indigo-500"
-                  }`}
-                  style={{ width: `${(text.length / 500) * 100}%` }}
-                />
-              </div>
-
-              <span className="text-sm">{text.length}/500</span>
-            </div>
-
-            {/* Right Side */}
-            <div className="flex items-center gap-3">
-              <select
-                {...register("targetlanguage", { required: true })}
-                className={`px-4 py-2 rounded-xl border outline-none transition w-48 ${
-                  darkMode
-                    ? "bg-slate-800 border-slate-700 text-white"
-                    : "bg-white border-slate-300 text-gray-800"
-                }`}
-              >
-                <option value="">Language</option>
-
-                {lang.map((l) => (
-                  <option key={l.code} value={l.code}>
-                    {l.language}
-                  </option>
-                ))}
-              </select>
-
-              <button
-                type="button"
-                onClick={() => startListening(setValue, setIsListening)}
-                className={`w-12 h-12 rounded-xl flex items-center justify-center text-white transition-all duration-300 ${
-                  isListening
-                    ? "bg-red-500 animate-pulse"
-                    : "bg-emerald-500 hover:bg-emerald-600"
-                }`}
-              >
-                {isListening ? (
-                  <SiListenhub size={22} />
-                ) : (
-                  <FaMicrophone size={20} />
-                )}
-              </button>
-
-              <Tooltip id="mic-tooltip" />
-
-              <button
-                type="submit"
-                className="px-7 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-500 hover:scale-105 active:scale-95 text-white font-semibold shadow-lg transition-all duration-300"
-              >
-                Send
-              </button>
-            </div>
-          </div>
         </div>
-      </form>
+
+        <span
+          className={`text-sm ${
+            darkMode ? "text-white" : "text-gray-700"
+          }`}
+        >
+          {text.length}/500
+        </span>
+      </div>
+
+      {/* Action Row */}
+      <div className="flex flex-col sm:flex-row gap-3">
+
+        {/* Language */}
+        <select
+          {...register("targetlanguage", { required: true })}
+          className={`flex-1 px-4 py-3 rounded-xl border outline-none transition ${
+            darkMode
+              ? "bg-slate-800 border-slate-700 text-white"
+              : "bg-white border-slate-300 text-gray-800"
+          }`}
+        >
+          <option value="">Language</option>
+
+          {lang.map((l) => (
+            <option key={l.code} value={l.code}>
+              {l.language}
+            </option>
+          ))}
+        </select>
+
+        {/* Mic */}
+        <button
+          type="button"
+          onClick={() =>
+            startListening(setValue, setIsListening)
+          }
+          className={`sm:w-12 w-full h-12 rounded-xl flex items-center justify-center text-white transition-all duration-300 ${
+            isListening
+              ? "bg-red-500 animate-pulse"
+              : "bg-emerald-500 hover:bg-emerald-600"
+          }`}
+        >
+          {isListening ? (
+            <SiListenhub size={22} />
+          ) : (
+            <FaMicrophone size={20} />
+          )}
+        </button>
+
+        <Tooltip id="mic-tooltip" />
+
+        {/* Send */}
+        <button
+          type="submit"
+          className="sm:w-auto w-full px-8 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-500 hover:scale-105 active:scale-95 text-white font-semibold shadow-lg transition-all duration-300"
+        >
+          Send
+        </button>
+      </div>
+    </div>
+  </div>
+</form>
     </div>
   );
 }
